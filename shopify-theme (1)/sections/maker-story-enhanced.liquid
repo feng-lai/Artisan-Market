@@ -1,0 +1,144 @@
+<style>
+  .maker-story {
+    padding: 6rem 0;
+    background-color: rgba(var(--color-base-background-2));
+  }
+  
+  .maker-story__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  
+  .maker-story__image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .maker-story__content {
+    padding: 2rem;
+  }
+  
+  .maker-story__title {
+    font-size: 2.4rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: rgba(var(--color-base-text));
+  }
+  
+  .maker-story__text {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: rgba(var(--color-base-text), 0.8);
+    margin-bottom: 2.5rem;
+  }
+  
+  .maker-story__button {
+    display: inline-block;
+    background-color: rgba(var(--color-base-text));
+    color: rgba(var(--color-base-background-1));
+    padding: 1.2rem 2.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    border-radius: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .maker-story__button:hover {
+    background-color: rgba(var(--color-base-accent-1));
+  }
+  
+  @media screen and (max-width: 990px) {
+    .maker-story__container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    
+    .maker-story__image {
+      height: 300px;
+    }
+    
+    .maker-story__content {
+      padding: 1rem;
+      text-align: center;
+    }
+  }
+</style>
+
+<section class="maker-story">
+  <div class="page-width">
+    <div class="maker-story__container">
+      <div class="maker-story__image-wrapper">
+        {%- if section.settings.image != blank -%}
+          <img src="{{ section.settings.image | image_url: width: 600 }}" 
+               alt="{{ section.settings.image.alt | escape }}" 
+               class="maker-story__image"
+               loading="lazy">
+        {%- else -%}
+          <div class="maker-story__image" style="background-color: #4ECDC4; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem;">
+            Product Image
+          </div>
+        {%- endif -%}
+      </div>
+      
+      <div class="maker-story__content">
+        <h2 class="maker-story__title">{{ section.settings.title | default: "Our Maker Story" }}</h2>
+        <div class="maker-story__text">
+          {{ section.settings.text | default: "Every piece in our collection tells a story of passion, skill, and dedication. Our artisans pour their hearts into creating unique, handcrafted items that bring beauty and meaning to your everyday life." }}
+        </div>
+        <a href="{{ section.settings.button_link | default: '/pages/about' }}" class="maker-story__button">
+          {{ section.settings.button_text | default: "Learn More" }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Maker Story Enhanced",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Our Maker Story"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Every piece in our collection tells a story of passion, skill, and dedication. Our artisans pour their hearts into creating unique, handcrafted items that bring beauty and meaning to your everyday life."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Maker Story Enhanced"
+    }
+  ]
+}
+{% endschema %}

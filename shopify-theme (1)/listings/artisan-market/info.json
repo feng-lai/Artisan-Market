@@ -1,0 +1,18 @@
+{
+  "name": "Artisan Market",
+  "description": "A clean, modern theme for artisanal and handcrafted products.",
+  "category": "Fashion, Home & Garden",
+  "styles": {
+    "color_schemes": {
+      "default": {
+        "primary": "#121212",
+        "secondary": "#334FB4",
+        "background": "#FFFFFF"
+      }
+    },
+    "typography": {
+      "heading_font": "assistant_n4",
+      "body_font": "assistant_n4"
+    }
+  }
+}

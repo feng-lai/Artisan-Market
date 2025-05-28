@@ -1,0 +1,101 @@
+{%- layout 'gift_card' -%}
+{%- assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros: gift_card.currency -%}
+{%- assign formatted_initial_value_stripped = formatted_initial_value | strip_html -%}
+<div class="gift-card">
+  <header class="gift-card__header">
+    <span class="h2">{{ 'gift_cards.issued.subtext' | t }}</span>
+    {% unless gift_card.enabled %}
+      <span class="gift-card__label">{{ 'gift_cards.issued.disabled' | t }}</span>
+    {% endunless %}
+    {% assign gift_card_expiry_date = gift_card.expires_on | date: '%d/%m/%y' %}
+    {% if gift_card.expired and gift_card.enabled %}
+      <span class="gift-card__label">{{ 'gift_cards.issued.expired' | t: expiry: gift_card_expiry_date }}</span>
+    {% endif %}
+    {% if gift_card.expired != true and gift_card.expires_on and gift_card.enabled %}
+      <span class="gift-card__label">{{ 'gift_cards.issued.active' | t: expiry: gift_card_expiry_date }}</span>
+    {% endif %}
+  </header>
+
+  <main class="gift-card__main">
+    <div class="gift-card__image-wrapper">
+      <img src="{{ 'gift-card/card.svg' | shopify_asset_url }}" alt="" class="gift-card__image" height="{{ 570 | divided_by: 1.5 }}" width="570" loading="lazy">
+    </div>
+    <div class="gift-card__content">
+      <h1 class="gift-card__heading">{{ 'gift_cards.issued.here_is_your_gift_card' | t }}</h1>
+      <div class="gift-card__price">
+        <p>{{ formatted_initial_value }}</p>
+        {%- if gift_card.balance != gift_card.initial_value -%}
+          <p class="gift-card__label">{{ 'gift_cards.issued.remaining_html' | t: balance: gift_card.balance | money }}</p>
+        {%- endif -%}
+      </div>
+
+      <div class="gift-card__code">
+        <input
+          type="text"
+          class="gift-card__code-input"
+          value="{{ gift_card.code | format_code }}"
+          aria-label="{{ 'gift_cards.issued.gift_card_code' | t }}"
+          readonly
+        >
+        <div class="gift-card__code-buttons">
+          <button class="gift-card__code-button">{{ 'gift_cards.issued.copy_code' | t }}</button>
+          <span class="gift-card__code-success form__message" role="status"></span>
+          <template>
+            {%- render 'icon-success' -%}{{ 'gift_cards.issued.copy_code_success' | t }}
+          </template>
+        </div>
+      </div>
+
+      {% if gift_card.pass_url %}
+        <div class="gift-card__buttons">
+          <a href="{{ gift_card.pass_url }}" class="gift_card__apple-wallet">
+            <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}" loading="lazy">
+          </a>
+        </div>
+      {% endif %}
+
+      <div class="gift-card__qr-code" data-identifier="{{ gift_card.qr_identifier }}"></div>
+
+      <div class="gift-card__shop-link">
+        <a href="{{ routes.root_url }}" class="link" target="_blank" rel="noopener" aria-describedby="a11y-new-window-message">
+          {{ 'gift_cards.issued.shop_link' | t }}
+        </a>
+      </div>
+
+      <div class="gift-card__instructions">
+        <p class="gift-card__instructions-text">{{ 'gift_cards.issued.redeem' | t }}</p>
+      </div>
+    </div>
+  </main>
+
+  <div hidden>
+    <span id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</span>
+  </div>
+</div>
+
+<script>
+  var string = { qrImageAlt: {{ 'gift_cards.issued.qr_image_alt' | t | json }} };
+  document.addEventListener('DOMContentLoaded', function() {
+   new QRCode( document.querySelector('.gift-card__qr-code'), {
+    text: document.querySelector('.gift-card__qr-code').dataset.identifier,
+    width: 120,
+    height: 120,
+    imageAltText: string.qrImageAlt
+    });
+  });
+
+  var template = document.getElementsByTagName("template")[0];
+  var clonedTemplate = template.content.cloneNode(true);
+
+  var isMessageDisplayed = false
+  document
+  .querySelector('.gift-card__code-button')
+  .addEventListener('click', () => {
+    navigator.clipboard.writeText(document.querySelector('.gift-card__code-input').value).then(function () {
+      if (!isMessageDisplayed) {
+        document.querySelector('.gift-card__code-success').appendChild(clonedTemplate);
+        isMessageDisplayed = true
+      }
+    });
+  });
+</script>

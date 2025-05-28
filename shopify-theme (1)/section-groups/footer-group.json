@@ -1,0 +1,40 @@
+{
+  "name": "Footer group",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "footer-0": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "footer"
+          }
+        },
+        "footer-1": {
+          "type": "text",
+          "settings": {
+            "heading": "About Us",
+            "subtext": "<p>Share store details, promotions, or brand content with your customers.</p>"
+          }
+        },
+        "footer-2": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Subscribe to our emails",
+            "subtext": "<p>Be the first to know about new collections and exclusive offers.</p>"
+          }
+        }
+      },
+      "block_order": ["footer-0", "footer-1", "footer-2"],
+      "settings": {
+        "color_scheme": "background-1",
+        "enable_language_selector": true,
+        "enable_country_selector": true,
+        "payment_enable": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

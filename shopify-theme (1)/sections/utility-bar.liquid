@@ -1,0 +1,218 @@
+<style>
+  .utility-bar {
+    background-color: rgba(var(--color-base-background-2));
+    border-bottom: 1px solid rgba(var(--color-base-text), 0.08);
+    font-size: 1.2rem;
+    padding: 0.8rem 0;
+  }
+  
+  .utility-bar__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .utility-bar__left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .utility-bar__right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .utility-bar__contact {
+    color: rgba(var(--color-base-text), 0.7);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .utility-bar__contact:hover {
+    color: rgba(var(--color-base-accent-1));
+  }
+  
+  .utility-bar__search {
+    position: relative;
+    min-width: 200px;
+  }
+  
+  .utility-bar__search-input {
+    width: 100%;
+    padding: 0.6rem 3rem 0.6rem 1rem;
+    border: 1px solid rgba(var(--color-base-text), 0.2);
+    border-radius: 4px;
+    font-size: 1.2rem;
+    background-color: rgba(var(--color-base-background-1));
+  }
+  
+  .utility-bar__search-button {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: rgba(var(--color-base-text), 0.6);
+  }
+  
+  .utility-bar__links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .utility-bar__link {
+    color: rgba(var(--color-base-text), 0.7);
+    text-decoration: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s ease;
+  }
+  
+  .utility-bar__link:hover {
+    color: rgba(var(--color-base-accent-1));
+  }
+  
+  .utility-bar__icon {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  
+  @media screen and (max-width: 990px) {
+    .utility-bar__search {
+      min-width: 150px;
+    }
+    
+    .utility-bar__left {
+      gap: 1rem;
+    }
+    
+    .utility-bar__right {
+      gap: 1rem;
+    }
+  }
+  
+  @media screen and (max-width: 749px) {
+    .utility-bar {
+      padding: 0.6rem 0;
+    }
+    
+    .utility-bar__content {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    
+    .utility-bar__search {
+      order: -1;
+      width: 100%;
+      min-width: auto;
+    }
+    
+    .utility-bar__left,
+    .utility-bar__right {
+      justify-content: center;
+    }
+  }
+</style>
+
+<div class="utility-bar">
+  <div class="page-width">
+    <div class="utility-bar__content">
+      <div class="utility-bar__left">
+        {%- if section.settings.show_phone and section.settings.phone != blank -%}
+          <a href="tel:{{ section.settings.phone }}" class="utility-bar__contact">
+            📞 {{ section.settings.contact_text }} {{ section.settings.phone }}
+          </a>
+        {%- endif -%}
+      </div>
+      
+      <div class="utility-bar__search">
+        <form action="{{ routes.search_url }}" method="get" role="search">
+          <input
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'general.search.search' | t }}"
+            class="utility-bar__search-input"
+            aria-label="{{ 'general.search.search' | t }}"
+          >
+          <button type="submit" class="utility-bar__search-button" aria-label="{{ 'general.search.search' | t }}">
+            {% render 'icon-search' %}
+          </button>
+        </form>
+      </div>
+      
+      <div class="utility-bar__right">
+        <div class="utility-bar__links">
+          <a href="{{ routes.account_url }}" class="utility-bar__link">
+            {% render 'icon-account' %}
+            <span class="small-hide">{{ 'customer.account.title' | t }}</span>
+          </a>
+          
+          <a href="{{ routes.cart_url }}" class="utility-bar__link" id="cart-icon-bubble">
+            {% render 'icon-cart' %}
+            <span class="small-hide">{{ 'templates.cart.cart' | t }}</span>
+            <span class="cart-count-bubble">
+              {%- if cart != empty -%}
+                <span aria-hidden="true">{{ cart.item_count }}</span>
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              {%- endif -%}
+            </span>
+          </a>
+          
+          {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+            <div class="utility-bar__localization">
+              {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+                <div class="no-js-hidden">
+                  <h2 class="caption-large text-body" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                  {%- render 'country-localization', localPosition: 'HeaderCountry' -%}
+                </div>
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Utility bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "default": true,
+      "label": "Show phone number"
+    },
+    {
+      "type": "text",
+      "id": "contact_text",
+      "default": "CALL US:",
+      "label": "Contact text"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "default": "(1800) 000 8808",
+      "label": "Phone number"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "Enable country/region selector"
+    }
+  ]
+}
+{% endschema %}

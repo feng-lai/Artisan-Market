@@ -1,0 +1,85 @@
+<style>
+  .announcement-bar {
+    background-color: rgba(var(--color-base-accent-1));
+    color: rgba(var(--color-base-solid-button-labels));
+    font-size: 1.2rem;
+    padding: 0.8rem 0;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .announcement-bar__message {
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 0.05rem;
+  }
+  
+  .announcement-bar__link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+  }
+  
+  .announcement-bar__link:hover {
+    text-decoration: underline;
+  }
+  
+  @media screen and (max-width: 749px) {
+    .announcement-bar {
+      font-size: 1.1rem;
+      padding: 0.6rem 0;
+    }
+  }
+</style>
+
+<div class="announcement-bar">
+  <div class="page-width">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'announcement' -%}
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="announcement-bar__link">
+              <p class="announcement-bar__message">{{ block.settings.text | escape }}</p>
+            </a>
+          {%- else -%}
+            <p class="announcement-bar__message">{{ block.settings.text | escape }}</p>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Welcome to our store",
+          "label": "Text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement"
+      }
+    ]
+  }
+}
+{% endschema %}

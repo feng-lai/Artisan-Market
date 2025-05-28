@@ -1,0 +1,119 @@
+<style>
+  .newsletter {
+    padding: 6rem 0;
+    text-align: center;
+  }
+  
+  .newsletter__content {
+    max-width: 50rem;
+    margin: 0 auto;
+  }
+  
+  .newsletter__title {
+    font-size: 2.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: rgba(var(--color-base-text));
+  }
+  
+  .newsletter__text {
+    font-size: 1.6rem;
+    color: rgba(var(--color-base-text), 0.8);
+    margin-bottom: 3rem;
+  }
+  
+  .newsletter__form {
+    display: flex;
+    gap: 1rem;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+  
+  .newsletter__input {
+    flex: 1;
+    padding: 1.5rem;
+    border: 1px solid rgba(var(--color-base-text), 0.2);
+    font-size: 1.4rem;
+    border-radius: 0;
+  }
+  
+  .newsletter__button {
+    background-color: rgba(var(--color-base-text));
+    color: rgba(var(--color-base-background-1));
+    padding: 1.5rem 2.5rem;
+    border: none;
+    font-weight: 600;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .newsletter__button:hover {
+    background-color: rgba(var(--color-base-accent-1));
+  }
+  
+  @media screen and (max-width: 749px) {
+    .newsletter__form {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<section class="newsletter color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    <div class="newsletter__content">
+      <h2 class="newsletter__title">{{ section.settings.heading | default: "Stay Connected" }}</h2>
+      <div class="newsletter__text rte">
+        {{ section.settings.subtext | default: "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>" }}
+      </div>
+      
+      {% form 'customer', class: 'newsletter__form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="email" 
+               name="contact[email]" 
+               class="newsletter__input" 
+               placeholder="{{ 'newsletter.label' | t }}"
+               aria-label="{{ 'newsletter.label' | t }}"
+               required>
+        <button type="submit" class="newsletter__button">
+          {{ 'newsletter.button_label' | t }}
+        </button>
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stay Connected"
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "Text",
+      "default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}
