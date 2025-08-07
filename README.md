@@ -2,6 +2,9 @@
 
 Everything you need to know about setting up and customizing your theme
 
+> 🌍 Available in:  
+> [日本語 (README-jp.md)](README-jp.md) | [العربية (README-ar.md)](README-ar.md) | [Español (README-es.md)](README-es.md) | [Português (README-pt.md)](README-pt.md)
+> 
 ## Documentation Navigation
 - [Getting Started](#getting-started)
   - [Installation](#installation)
